@@ -32,7 +32,10 @@ list
 {
   users {
     name,
-    age
+    age,
+    hobbies{
+      name
+    }
   }
 }
 ```
