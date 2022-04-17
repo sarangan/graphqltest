@@ -7,7 +7,7 @@ const UserType = new GraphQLObjectType({
     name: 'User',
     description: 'Docs for user',
     fields: () => ({
-        id: { type: GraphQLString },
+        id: { type: GraphQLID },
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
         hobbies: { 
@@ -57,9 +57,9 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         user: {
             type: UserType,
-            args: { id: { type: GraphQLString }, name: {type: GraphQLString} },
+            args: { id: { type: GraphQLID }, name: {type: GraphQLString} },
             resolve(parent, args) {
-                console.log(args);
+                console.log("🚀 ~ file: schema.js ~ get ~ resolve ~ args", args)
                 return {
                     id: '1',
                     name: 'John Doe',
@@ -78,10 +78,58 @@ const RootQuery = new GraphQLObjectType({
                     userId: '1',
                 }
             }
+        },
+        users: {
+            type: new GraphQLList(UserType),
+            resolve(parent, args) {
+                return [{
+                    id: '1',
+                    name: 'John Doe',
+                    age: 30,
+                }, {
+                    id: '2',
+                    name: 'John Doe',
+                    age: 32,
+                }]
+            }
+        }
+    }
+});
+
+const mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        createUser: {
+            type: UserType,
+            args: {
+                name: { type: GraphQLString },
+                age: { type: GraphQLInt },
+            },
+            resolve(parent, args) {
+                console.log("🚀 ~ file: schema.js ~ create ~ resolve ~ args", args)
+                return {
+                    name: args.name,
+                    age: args.age,
+                }
+            }
+        },
+        createHobby: {
+            type: HobbyType,
+            args: {
+                name: { type: GraphQLString },
+                description: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                return {
+                    name: args.name,
+                    description: args.description,
+                }
+            }
         }
     }
 });
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: mutation
 });
