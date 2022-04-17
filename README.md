@@ -26,3 +26,13 @@ mutation{
 }
 
 ```
+
+list 
+```
+{
+  users {
+    name,
+    age
+  }
+}
+```
